@@ -46,7 +46,6 @@ public class EappAutomationTestCases {
 		homePageTitle = "Home - Execute Automation Employee App";
 
 		aboutMe = "ExecuteAutomation Employee Application v1.0 is a simple web application for showing very few functionality of Employee details.";
-
 	}
 
 	@Test
