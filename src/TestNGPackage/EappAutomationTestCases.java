@@ -21,12 +21,9 @@ import org.testng.asserts.SoftAssert;
 @Listeners(TestNGPackage.TestEventListener.class)
 public class EappAutomationTestCases {
 	WebDriver driver;
-	String userName;
-	String password;
-	String confirmPassword;
-	String email;
 	String homePageTitle;
 	String aboutMe;
+	Integer randomNumber;
 
 	// SoftAssert objSoftAssert;
 	// Initializing all the required variable
@@ -37,14 +34,25 @@ public class EappAutomationTestCases {
 		driver.get("http://eaapp.somee.com/");
 		
 		Random random = new Random();
-		Integer randomNumber = random.nextInt(100);
-
-		userName = "manchu" + randomNumber;
-		password = "Manchana1@";
-		confirmPassword = "Manchana1@";
-		email = "manchu" + randomNumber + "@gmail.com";
+		randomNumber = random.nextInt(100);
+		
 		homePageTitle = "Home - Execute Automation Employee App";
 		aboutMe = "ExecuteAutomation Employee Application v1.0 is a simple web application for showing very few functionality of Employee details.";
+	}
+	
+	@DataProvider(name = "RegistrationCredentials")
+	public Object[][] DataForTest() {
+		return new Object[][] { { "manchu" + randomNumber, "Manchana1@", "Manchana1@", "manchu" + randomNumber+"@gmail.com" }, { "man" + randomNumber, "Manchana1@", "Manchana1@", "man" + randomNumber+"@gmail.com" } };
+	}
+
+	@DataProvider(name = "LoginCredentials")
+	public Object[][] DataForLoginTest() {
+		return new Object[][] { { "manchu" + randomNumber,"Manchana1@" }, { "man" + randomNumber, "Manchana1@" } };
+	}
+
+	@DataProvider(name = "browser")
+	public Object[][] DataForBrowserTest() {
+		return new Object[][] { { "admin1", "password1" }, { "admin2", "password2" } };
 	}
 
 	@Test
@@ -54,8 +62,8 @@ public class EappAutomationTestCases {
 	}
 
 	// User should register with valid data
-	@Test(description="This is a test to verify user resistration in Eapp.")
-	public void UserRegistration() {
+	@Test(dataProvider="RegistrationCredentials", description="This is a test to verify user resistration in Eapp.")
+	public void UserRegistration(String userName, String password, String confirmPassword, String email ) {
 		SoftAssert ObjSoftAssert = new SoftAssert();
 		driver.findElement(By.id("registerLink")).click();
 
@@ -136,8 +144,8 @@ public class EappAutomationTestCases {
 		Reporter.log("Employee list page is verified!");
 	}
 
-	@Test(priority = 2, dependsOnMethods = "UserRegistration", description="This is a test to verify Eapp login page.")
-	public void EappLogin() {
+	@Test(priority = 2, dependsOnMethods = "UserRegistration", description="This is a test to verify Eapp login page.", dataProvider ="LoginCredentials")
+	public void EappLogin(String userName, String password) {
 		SoftAssert objSoftAssert = new SoftAssert();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		driver.findElement(By.id("loginLink")).click();
