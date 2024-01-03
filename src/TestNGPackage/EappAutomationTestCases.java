@@ -44,7 +44,6 @@ public class EappAutomationTestCases {
 		confirmPassword = "Manchana1@";
 		email = "manchu" + randomNumber + "@gmail.com";
 		homePageTitle = "Home - Execute Automation Employee App";
-
 		aboutMe = "ExecuteAutomation Employee Application v1.0 is a simple web application for showing very few functionality of Employee details.";
 	}
 
