@@ -59,6 +59,7 @@ public class EappAutomationTestCases {
 	public void DoTest() {
 		Reporter.log("Do Test started...");
 		Reporter.log("Do Test completed...");
+		
 	}
 
 	// User should register with valid data
