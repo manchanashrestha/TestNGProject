@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="EappSuite">
+<suite name="EappSuite" parallel="tests" thread-count="5">
 	<test name="ChromeTest">
 		<parameter name="browser" value="chrome" />
 		<classes>
@@ -12,9 +12,9 @@
 					<parameter name="emailData" value="Ab.c1111@gmail.com" />
 
 					<include name="UserRegistration" />
-					<include name="EappLogin" />
-					<include name="EappHomePage" />
-					<include name="EappAboutPage" />
+					<exclude name="EappLogin" />
+					<exclude name="EappHomePage" />
+					<exclude name="EappAboutPage" />
 					<include name="EappEmployeeList" />
 					<include name="DoTest" />
 				</methods>
@@ -33,15 +33,14 @@
 
 					<include name="UserRegistration" />
 					<include name="EappLogin" />
-					<include name="EappHomePage" />
-					<include name="EappAboutPage" />
+					<exclude name="EappHomePage" />
+					<exclude name="EappAboutPage" />
 					<include name="EappEmployeeList" />
 					<include name="DoTest" />
 				</methods>
 			</class>
 		</classes>
 	</test>
-	
 	<test name="EdgeTest">
 		<parameter name="browser" value="edge" />
 		<classes>
@@ -53,9 +52,9 @@
 					<parameter name="emailData" value="Ab.c1113@gmail.com" />
 
 					<include name="UserRegistration" />
-					<include name="EappLogin" />
+					<exclude name="EappLogin" />
 					<include name="EappHomePage" />
-					<include name="EappAboutPage" />
+					<exclude name="EappAboutPage" />
 					<include name="EappEmployeeList" />
 					<include name="DoTest" />
 				</methods>

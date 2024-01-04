@@ -29,42 +29,39 @@ public class EappAutomationTestCases {
 
 	// SoftAssert objSoftAssert;
 	// Initializing all the required variable
-	@Parameters({"browser"})
+	@Parameters({ "browser" })
 	@BeforeTest
 	public void SetUp(String browser) {
-		if(browser.equalsIgnoreCase("chrome"))
-		{
+		if (browser.equalsIgnoreCase("chrome")) {
 			driver = new ChromeDriver();
-		}
-		else if(browser.equalsIgnoreCase("firefox"))
-		{
+		} else if (browser.equalsIgnoreCase("firefox")) {
 			driver = new FirefoxDriver();
-		}
-		else if(browser.equalsIgnoreCase("edge"))
-		{
+		} else if (browser.equalsIgnoreCase("edge")) {
 			driver = new EdgeDriver();
 		}
 		System.out.println("Test is running in " + browser + "browser");
 		Reporter.log("Test is running in " + browser + "browser");
-		
+
 		driver.manage().window().maximize();
 		driver.get("http://eaapp.somee.com/");
-		
+
 		Random random = new Random();
 		randomNumber = random.nextInt(100);
-		
+
 		homePageTitle = "Home - Execute Automation Employee App";
 		aboutMe = "ExecuteAutomation Employee Application v1.0 is a simple web application for showing very few functionality of Employee details.";
 	}
-	
+
 	@DataProvider(name = "RegistrationCredentials")
 	public Object[][] DataForTest() {
-		return new Object[][] { { "manchu" + randomNumber, "Manchana1@", "Manchana1@", "manchu" + randomNumber+"@gmail.com" }, { "man" + randomNumber, "Manchana1@", "Manchana1@", "man" + randomNumber+"@gmail.com" } };
+		return new Object[][] {
+				{ "manchu" + randomNumber, "Manchana1@", "Manchana1@", "manchu" + randomNumber + "@gmail.com" },
+				{ "man" + randomNumber, "Manchana1@", "Manchana1@", "man" + randomNumber + "@gmail.com" } };
 	}
 
 	@DataProvider(name = "LoginCredentials")
 	public Object[][] DataForLoginTest() {
-		return new Object[][] { { "manchu" + randomNumber,"Manchana1@" }, { "man" + randomNumber, "Manchana1@" } };
+		return new Object[][] { { "manchu" + randomNumber, "Manchana1@" }, { "man" + randomNumber, "Manchana1@" } };
 	}
 
 	@DataProvider(name = "browser")
@@ -72,18 +69,11 @@ public class EappAutomationTestCases {
 		return new Object[][] { { "chrome" }, { "firefox" } };
 	}
 
-	@Test
-	public void DoTest() {
-		Reporter.log("Do Test started...");
-		Reporter.log("Do Test completed...");
-		
-	}
-
 	// User should register with valid data
-	@Parameters({"userNameData","passwordData","confirmPasswordData","emailData"})
+	@Parameters({ "userNameData", "passwordData", "confirmPasswordData", "emailData" })
 //	@Test(dataProvider="RegistrationCredentials", description="This is a test to verify user resistration in Eapp.")
-	@Test( description="This is a test to verify user resistration in Eapp.")
-	public void UserRegistration(String userName, String password, String confirmPassword, String email ) {
+	@Test(description = "This is a test to verify user resistration in Eapp.")
+	public void UserRegistration(String userName, String password, String confirmPassword, String email) {
 		SoftAssert ObjSoftAssert = new SoftAssert();
 		driver.findElement(By.id("registerLink")).click();
 
@@ -123,25 +113,27 @@ public class EappAutomationTestCases {
 			IfRegister.get(0).click();
 		}
 		ObjSoftAssert.assertAll("This Is asserting for all Soft Assertion");
-		// To print the message in report and console, add true		
-		Reporter.log("This is End of First Test Case and verified User Registration and printed in console as well", 1, true);
+		// To print the message in report and console, add true
+		Reporter.log("This is End of First Test Case and verified User Registration and printed in console as well", 1,
+				true);
 
 	}
 
 	// User should able to redirect to home page of eapp
-	@Test(priority=3, description="This is a test to verify Eapp home page")
+	@Test(priority = 3, description = "This is a test to verify Eapp home page")
 	public void EappHomePage() {
 		SoftAssert objSoftAssert = new SoftAssert();
 		driver.findElement(By.xpath("//div[1]/div[2]/ul/li[1]/a")).click();
 		// Check if image is visible
 		var ifImage = driver.findElement(By.xpath("//div[2]/div[1]/table/tbody/tr/td/img")).isDisplayed();
 		objSoftAssert.assertEquals(true, ifImage, "Home page image is not visible!");
-		//assertEquals(ifImage, true, "Home page image is not visible from hard assert!");
+		// assertEquals(ifImage, true, "Home page image is not visible from hard
+		// assert!");
 		objSoftAssert.assertAll();
 		Reporter.log("Eapp home page is verified!");
 	}
 
-	@Test(priority=4, description="This is a test to verify Eapp about page.")
+	@Test(priority = 4, description = "This is a test to verify Eapp about page.")
 	public void EappAboutPage() {
 		SoftAssert objSoftAssert = new SoftAssert();
 		driver.get("http://eaapp.somee.com/Home/About");
@@ -151,7 +143,7 @@ public class EappAutomationTestCases {
 		Reporter.log("About page is verified!");
 	}
 
-	@Test(priority=5, description="This is a test to verify Eapp employee list page.")
+	@Test(priority = 5, description = "This is a test to verify Eapp employee list page.")
 	public void EappEmployeeList() {
 		SoftAssert objSoftAssert = new SoftAssert();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -165,9 +157,9 @@ public class EappAutomationTestCases {
 		Reporter.log("Employee list page is verified!");
 	}
 
-	@Parameters({"userNameData","passwordData"})
+	@Parameters({ "userNameData", "passwordData" })
 //	@Test(priority = 2, dependsOnMethods = "UserRegistration", description="This is a test to verify Eapp login page.", dataProvider ="LoginCredentials")
-	@Test(priority = 2, dependsOnMethods = "UserRegistration", description="This is a test to verify Eapp login page.")
+	@Test(priority = 2, dependsOnMethods = "UserRegistration", description = "This is a test to verify Eapp login page.")
 	public void EappLogin(String userName, String password) {
 		SoftAssert objSoftAssert = new SoftAssert();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
