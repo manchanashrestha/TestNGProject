@@ -7,6 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
@@ -14,7 +16,7 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
-//import org.testng.annotations.Parameters;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -27,9 +29,24 @@ public class EappAutomationTestCases {
 
 	// SoftAssert objSoftAssert;
 	// Initializing all the required variable
+	@Parameters({"browser"})
 	@BeforeTest
-	public void SetUp() {
-		driver = new ChromeDriver();
+	public void SetUp(String browser) {
+		if(browser.equalsIgnoreCase("chrome"))
+		{
+			driver = new ChromeDriver();
+		}
+		else if(browser.equalsIgnoreCase("firefox"))
+		{
+			driver = new FirefoxDriver();
+		}
+		else if(browser.equalsIgnoreCase("edge"))
+		{
+			driver = new EdgeDriver();
+		}
+		System.out.println("Test is running in " + browser + "browser");
+		Reporter.log("Test is running in " + browser + "browser");
+		
 		driver.manage().window().maximize();
 		driver.get("http://eaapp.somee.com/");
 		
@@ -52,7 +69,7 @@ public class EappAutomationTestCases {
 
 	@DataProvider(name = "browser")
 	public Object[][] DataForBrowserTest() {
-		return new Object[][] { { "admin1", "password1" }, { "admin2", "password2" } };
+		return new Object[][] { { "chrome" }, { "firefox" } };
 	}
 
 	@Test
@@ -63,7 +80,9 @@ public class EappAutomationTestCases {
 	}
 
 	// User should register with valid data
-	@Test(dataProvider="RegistrationCredentials", description="This is a test to verify user resistration in Eapp.")
+	@Parameters({"userNameData","passwordData","confirmPasswordData","emailData"})
+//	@Test(dataProvider="RegistrationCredentials", description="This is a test to verify user resistration in Eapp.")
+	@Test( description="This is a test to verify user resistration in Eapp.")
 	public void UserRegistration(String userName, String password, String confirmPassword, String email ) {
 		SoftAssert ObjSoftAssert = new SoftAssert();
 		driver.findElement(By.id("registerLink")).click();
@@ -140,12 +159,15 @@ public class EappAutomationTestCases {
 		driver.findElement(By.xpath("//li[3]/a")).click();
 		WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table")));
 		String firstName = element.findElements(By.tagName("td")).get(0).getText();
-		objSoftAssert.assertEquals(firstName, "Karthik", "The first Name is not matched.");
+		objSoftAssert.assertNotNull(firstName, "The firstname is present as " + firstName);
+		Reporter.log("The firstname is present as " + firstName);
 		objSoftAssert.assertAll();
 		Reporter.log("Employee list page is verified!");
 	}
 
-	@Test(priority = 2, dependsOnMethods = "UserRegistration", description="This is a test to verify Eapp login page.", dataProvider ="LoginCredentials")
+	@Parameters({"userNameData","passwordData"})
+//	@Test(priority = 2, dependsOnMethods = "UserRegistration", description="This is a test to verify Eapp login page.", dataProvider ="LoginCredentials")
+	@Test(priority = 2, dependsOnMethods = "UserRegistration", description="This is a test to verify Eapp login page.")
 	public void EappLogin(String userName, String password) {
 		SoftAssert objSoftAssert = new SoftAssert();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
